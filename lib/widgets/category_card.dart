@@ -35,7 +35,7 @@ class CategoryCard extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Image.asset(
-                "images/${category.categoryImage}.png",
+                "assets/images/${category.categoryImage}.png",
                 errorBuilder: (context, obj, s) {
                   return Text("");
                 },
