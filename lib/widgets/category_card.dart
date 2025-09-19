@@ -1,6 +1,5 @@
 import 'package:deepen/models/category.dart';
 import 'package:deepen/providers/language_provider.dart';
-import 'package:deepen/widgets/questions_pack_card.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
 import '../screens/questions_packs_screen.dart';
@@ -36,7 +35,7 @@ class CategoryCard extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Image.asset(
-                "images/${category.categoryImage}.png",
+                "assets/images/${category.categoryImage}.png",
                 errorBuilder: (context, obj, s) {
                   return Text("");
                 },
