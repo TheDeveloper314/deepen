@@ -10,7 +10,6 @@ class QuestionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double height = MediaQuery.of(context).size.height;
     final String language = ref.read(languageProvider);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

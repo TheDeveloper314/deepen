@@ -1,5 +1,4 @@
 import 'package:deepen/constants.dart';
-import 'package:deepen/engines/main_engine.dart';
 import 'package:deepen/models/questions_pack.dart';
 import 'package:deepen/providers/language_provider.dart';
 import 'package:deepen/widgets/question_card.dart';
@@ -29,7 +28,6 @@ class _QuestionsScreenState extends ConsumerState<QuestionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
     final String language = ref.read(languageProvider);
     return Scaffold(
       backgroundColor: AppTheme.background,

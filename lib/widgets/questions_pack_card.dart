@@ -43,7 +43,7 @@ class QuestionsPackCard extends ConsumerWidget {
                   color: AppTheme.primary,
                 ),
                 child: Image.asset(
-                  "assets/images/${questionsPack.packImage}.png",
+                  "assets/images/${questionsPack.packImage}.webp",
                   errorBuilder: (context, obj, s) {
                     return Text("Error");
                   },

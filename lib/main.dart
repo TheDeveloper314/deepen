@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'myApp.dart';
+import 'my_app.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {

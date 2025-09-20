@@ -1,5 +1,3 @@
-import 'package:deepen/models/questions_pack.dart';
-
 class Question {
   final Map<String, dynamic> questionText;
 
