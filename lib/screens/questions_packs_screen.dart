@@ -52,14 +52,18 @@ class _QuestionsPacksScreenState extends ConsumerState<QuestionsPacksScreen> {
         ],
       ),
       body: SafeArea(
-        child: Wrap(
-          children:
-              packs
-                  .map(
-                    (questionsPack) =>
-                        QuestionsPackCard(questionsPack: questionsPack),
-                  )
-                  .toList(),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Wrap(
+              children:
+                  packs
+                      .map(
+                        (questionsPack) =>
+                            QuestionsPackCard(questionsPack: questionsPack),
+                      )
+                      .toList(),
+            ),
+          ),
         ),
       ),
     );
