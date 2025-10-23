@@ -1,9 +1,10 @@
 import 'package:deepen/models/category.dart';
 import 'package:deepen/providers/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants.dart';
 import '../screens/questions_packs_screen.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CategoryCard extends ConsumerWidget {
   final Category category;
@@ -45,7 +46,7 @@ class CategoryCard extends ConsumerWidget {
             SizedBox(height: height * 0.01),
             Text(
               category.categoryName[language] ?? "Unnamed",
-              style: kCategoryCardTitleTextStyle,
+              style: kTextStyle,
             ),
           ],
         ),

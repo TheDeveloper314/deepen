@@ -2,6 +2,7 @@ import 'package:deepen/models/questions_pack.dart';
 import 'package:deepen/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants.dart';
 import '../screens/questions_screen.dart';
 
@@ -53,7 +54,7 @@ class QuestionsPackCard extends ConsumerWidget {
               SizedBox(height: height * 0.01),
               Text(
                 questionsPack.packName[language] ?? "Unnamed",
-                style: kQuestionsPackCardTitleTextStyle,
+                style: kSubtitleTextStyle,
                 textAlign: TextAlign.center,
               ),
             ],

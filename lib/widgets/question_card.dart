@@ -1,6 +1,7 @@
 import 'package:deepen/models/question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants.dart';
 import '../providers/language_provider.dart';
 
@@ -29,7 +30,7 @@ class QuestionCard extends ConsumerWidget {
               child: Center(
                 child: Text(
                   question.questionText[language] ?? "No Question",
-                  style: kQuestionCardTitleTextStyle,
+                  style: kTextStyle,
                 ),
               ),
             ),

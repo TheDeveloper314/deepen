@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
-final double kSizedBoxHeightFactor = 0.015;
+const double kSmallSpacing = 10;
+const double kMediumSpacing = 20;
+const double kLargeSpacing = 30;
+const double kTitleFontSize = 22;
+const double kHeaderFontSize = 20;
+const double kFontSize = 18;
+const double kSubtitleFontSize = 16;
+const double kSmallSubtitleFontSize = 14;
+const double kSmallestSubtitleFontSize = 12;
 
 class AppTheme {
   static const primary = Color(0xffff6b6b);
@@ -9,28 +17,46 @@ class AppTheme {
   static const background = Color(0xffffffff);
   static const text = Color(0xff333333);
   static const surface = Color(0xffffd6a5);
+  static const subtitle = Colors.black45;
+  static const gradientDark = Color(0xffffceb2);
+  static const gradientLight = Color(0xfffff1e6);
 }
 
 final TextStyle kTitleTextStyle = TextStyle(
   color: AppTheme.text,
-  fontSize: 22,
+  fontSize: kTitleFontSize,
   fontWeight: FontWeight.w700,
 );
 
-final TextStyle kCategoryCardTitleTextStyle = TextStyle(
+final TextStyle kHeaderTextStyle = TextStyle(
   color: AppTheme.text,
-  fontSize: 18,
+  fontSize: kHeaderFontSize,
   fontWeight: FontWeight.w600,
 );
 
-final TextStyle kQuestionsPackCardTitleTextStyle = TextStyle(
+final TextStyle kTextStyle = TextStyle(color: AppTheme.text, fontSize: 18);
+
+final TextStyle kBoldTextStyle = TextStyle(
   color: AppTheme.text,
-  fontSize: 16,
-  fontWeight: FontWeight.w500,
+  fontSize: kFontSize,
+  fontWeight: FontWeight.w600,
 );
 
-final TextStyle kQuestionCardTitleTextStyle = TextStyle(
-  color: AppTheme.text,
-  fontSize: 16,
-  fontWeight: FontWeight.w400,
+final TextStyle kSubtitleTextStyle = TextStyle(
+  color: AppTheme.subtitle,
+  fontSize: kSubtitleFontSize,
+);
+final TextStyle kBoldSubtitleTextStyle = TextStyle(
+  color: AppTheme.subtitle,
+  fontSize: kSubtitleFontSize,
+  fontWeight: FontWeight.w700,
+);
+
+final TextStyle kSmallSubtitleTextStyle = TextStyle(
+  color: AppTheme.subtitle,
+  fontSize: kSmallSubtitleFontSize,
+);
+final TextStyle kSmallestSubtitleTextStyle = TextStyle(
+  color: AppTheme.subtitle,
+  fontSize: kSmallestSubtitleFontSize,
 );
