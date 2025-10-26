@@ -1,11 +1,13 @@
-import 'package:deepen/constants.dart';
 import 'package:deepen/models/questions_pack.dart';
 import 'package:deepen/providers/language_provider.dart';
+import 'package:deepen/screens/base_screen.dart';
 import 'package:deepen/widgets/question_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../models/question.dart';
+import '../widgets/custom_app_bar.dart';
 
 class QuestionsScreen extends ConsumerStatefulWidget {
   final QuestionsPack questionsPack;
@@ -30,34 +32,17 @@ class _QuestionsScreenState extends ConsumerState<QuestionsScreen> {
   Widget build(BuildContext context) {
     final String language = ref.read(languageProvider);
     return Scaffold(
-      backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        backgroundColor: AppTheme.background,
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                if (language == "en") {
-                  ref.read(languageProvider.notifier).state = "ar";
-                } else {
-                  ref.read(languageProvider.notifier).state = "en";
-                }
-              });
-            },
-            icon: Icon(Icons.language),
-          ),
-        ],
-        // actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
-        title: Center(
-          child: Text(questionsPack.packName[language] ?? "Unnamed"),
+      backgroundColor: Colors.transparent,
+      body: BaseScreen(
+        appBar: CustomAppBar(
+          title: questionsPack.packName[language]!,
+          withBackButton: true,
+          centerTitle: true,
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Flexible(
+            Expanded(
               child: CardSwiper(
                 isLoop: false,
                 allowedSwipeDirection: AllowedSwipeDirection.symmetric(

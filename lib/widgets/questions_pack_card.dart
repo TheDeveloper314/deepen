@@ -54,7 +54,7 @@ class QuestionsPackCard extends ConsumerWidget {
               SizedBox(height: height * 0.01),
               Text(
                 questionsPack.packName[language] ?? "Unnamed",
-                style: kSubtitleTextStyle,
+                style: kBoldSubtitleTextStyleWithMainColor,
                 textAlign: TextAlign.center,
               ),
             ],

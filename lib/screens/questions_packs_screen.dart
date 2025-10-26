@@ -1,10 +1,12 @@
-import 'package:deepen/constants.dart';
 import 'package:deepen/models/category.dart';
 import 'package:deepen/models/questions_pack.dart';
 import 'package:deepen/providers/language_provider.dart';
+import 'package:deepen/screens/base_screen.dart';
 import 'package:deepen/widgets/questions_pack_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../widgets/custom_app_bar.dart';
 
 class QuestionsPacksScreen extends ConsumerStatefulWidget {
   final Category category;
@@ -30,39 +32,22 @@ class _QuestionsPacksScreenState extends ConsumerState<QuestionsPacksScreen> {
   Widget build(BuildContext context) {
     final String language = ref.watch(languageProvider);
     return Scaffold(
-      backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        backgroundColor: AppTheme.background,
-        title: Center(
-          child: Text(category.categoryName[language] ?? "Unnamed"),
+      backgroundColor: Colors.transparent,
+      body: BaseScreen(
+        appBar: CustomAppBar(
+          title: category.categoryName[language]!,
+          withBackButton: true,
+          centerTitle: true,
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                if (language == "en") {
-                  ref.read(languageProvider.notifier).state = "ar";
-                } else {
-                  ref.read(languageProvider.notifier).state = "en";
-                }
-              });
-            },
-            icon: Icon(Icons.language),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Wrap(
-              children:
-                  packs
-                      .map(
-                        (questionsPack) =>
-                            QuestionsPackCard(questionsPack: questionsPack),
-                      )
-                      .toList(),
-            ),
+        child: Center(
+          child: Wrap(
+            children:
+                packs
+                    .map(
+                      (questionsPack) =>
+                          QuestionsPackCard(questionsPack: questionsPack),
+                    )
+                    .toList(),
           ),
         ),
       ),

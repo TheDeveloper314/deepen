@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+const double kSmallestSpacing = 5;
 const double kSmallSpacing = 10;
 const double kMediumSpacing = 20;
 const double kLargeSpacing = 30;
@@ -9,6 +10,9 @@ const double kFontSize = 18;
 const double kSubtitleFontSize = 16;
 const double kSmallSubtitleFontSize = 14;
 const double kSmallestSubtitleFontSize = 12;
+
+const double kElevation = 1;
+const double kBorderRadius = 15;
 
 class AppTheme {
   static const primary = Color(0xffff6b6b);
@@ -51,10 +55,19 @@ final TextStyle kBoldSubtitleTextStyle = TextStyle(
   fontSize: kSubtitleFontSize,
   fontWeight: FontWeight.w700,
 );
+final TextStyle kBoldSubtitleTextStyleWithMainColor = TextStyle(
+  fontSize: kSubtitleFontSize,
+  fontWeight: FontWeight.w700,
+);
 
 final TextStyle kSmallSubtitleTextStyle = TextStyle(
   color: AppTheme.subtitle,
   fontSize: kSmallSubtitleFontSize,
+);
+final TextStyle kBoldSmallSubtitleTextStyle = TextStyle(
+  color: AppTheme.subtitle,
+  fontSize: kSmallSubtitleFontSize,
+  fontWeight: FontWeight.w700,
 );
 final TextStyle kSmallestSubtitleTextStyle = TextStyle(
   color: AppTheme.subtitle,
