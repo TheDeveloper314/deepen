@@ -5,14 +5,27 @@ class BaseCard extends StatelessWidget {
   final double? elevation;
   final double? borderRadius;
   final Widget? child;
-  const BaseCard({super.key, this.elevation, this.borderRadius, this.child});
+  final Color? color;
+  final EdgeInsets? padding;
+  const BaseCard({
+    super.key,
+    this.elevation,
+    this.borderRadius,
+    this.child,
+    this.color,
+    this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: elevation ?? kElevation,
       borderRadius: BorderRadius.circular(borderRadius ?? kBorderRadius),
-      child: Padding(padding: EdgeInsets.all(16), child: child ?? SizedBox()),
+      color: color,
+      child: Padding(
+        padding: padding ?? EdgeInsets.all(16),
+        child: child ?? SizedBox(),
+      ),
     );
   }
 }

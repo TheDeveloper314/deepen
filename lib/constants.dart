@@ -4,6 +4,7 @@ const double kSmallestSpacing = 5;
 const double kSmallSpacing = 10;
 const double kMediumSpacing = 20;
 const double kLargeSpacing = 30;
+const double kLargeTitleFontSize = 24;
 const double kTitleFontSize = 22;
 const double kHeaderFontSize = 20;
 const double kFontSize = 18;
@@ -20,11 +21,18 @@ class AppTheme {
   static const accent = Color(0xffffd93d);
   static const background = Color(0xffffffff);
   static const text = Color(0xff333333);
-  static const surface = Color(0xffffd6a5);
+  static const surface = Color(0xfffffdfa);
   static const subtitle = Colors.black45;
-  static const gradientDark = Color(0xffffceb2);
+  static const gradientDark = Color(0xffffceb4);
   static const gradientLight = Color(0xfffff1e6);
 }
+
+final kLargeTitleTextStyleAmiri = TextStyle(
+  fontFamily: "amiri",
+  color: AppTheme.text,
+  fontSize: kLargeTitleFontSize,
+  fontWeight: FontWeight.w700,
+);
 
 final TextStyle kTitleTextStyle = TextStyle(
   color: AppTheme.text,
