@@ -1,7 +1,7 @@
 import 'package:deepen/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../engines/main_engine.dart';
+import '../services/main_engine.dart';
 import '../models/category.dart';
 import 'category_card.dart';
 
@@ -14,6 +14,7 @@ class CategoriesList extends StatefulWidget {
 
 class _CategoriesListState extends State<CategoriesList> {
   final List<Category> categories = mainEngine.getCategories();
+
   @override
   Widget build(BuildContext context) {
     return Column(
