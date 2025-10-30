@@ -13,6 +13,7 @@ const double kSwipeCardsHeightFactor = 0.45;
 
 class QuestionsScreen extends ConsumerStatefulWidget {
   final QuestionsPack questionsPack;
+
   const QuestionsScreen({super.key, required this.questionsPack});
 
   @override
@@ -35,7 +36,6 @@ class _QuestionsScreenState extends ConsumerState<QuestionsScreen> {
     final String language = ref.read(languageProvider);
     final double mediaHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: BaseScreen(
         appBar: CustomAppBar(
           title: questionsPack.packName[language]!,

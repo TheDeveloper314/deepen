@@ -10,6 +10,7 @@ import '../widgets/custom_app_bar.dart';
 
 class QuestionsPacksScreen extends ConsumerStatefulWidget {
   final Category category;
+
   const QuestionsPacksScreen({super.key, required this.category});
 
   @override
@@ -32,7 +33,6 @@ class _QuestionsPacksScreenState extends ConsumerState<QuestionsPacksScreen> {
   Widget build(BuildContext context) {
     final String language = ref.watch(languageProvider);
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: BaseScreen(
         appBar: CustomAppBar(
           title: category.categoryName[language]!,

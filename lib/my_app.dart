@@ -1,12 +1,15 @@
 import 'package:deepen/constants.dart';
+import 'package:deepen/providers/initializer_provider.dart';
 import 'package:deepen/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final initializerAsyncData = ref.watch(initializerProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -16,7 +19,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       title: "Deepen",
-      home: HomeScreen(),
+      home: initializerAsyncData.when(
+        data: (_) => HomeScreen(),
+        error: (e, s) => Center(child: Text(e.toString())),
+        loading: () => Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }
