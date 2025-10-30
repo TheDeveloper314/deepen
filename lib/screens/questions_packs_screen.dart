@@ -1,7 +1,7 @@
-import 'package:deepen/models/category.dart';
-import 'package:deepen/models/questions_pack.dart';
+import 'package:deepen/database/app_database.dart' show Category, QuestionPack;
 import 'package:deepen/providers/language_provider.dart';
 import 'package:deepen/screens/base_screen.dart';
+import 'package:deepen/services/local_database_engine.dart';
 import 'package:deepen/widgets/questions_pack_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,36 +20,51 @@ class QuestionsPacksScreen extends ConsumerStatefulWidget {
 
 class _QuestionsPacksScreenState extends ConsumerState<QuestionsPacksScreen> {
   late final Category category;
-  late final List<QuestionsPack> packs;
 
   @override
   void initState() {
     category = widget.category;
-    packs = category.packs;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String language = ref.watch(languageProvider);
-    return Scaffold(
-      body: BaseScreen(
-        appBar: CustomAppBar(
-          title: category.categoryName[language]!,
-          withBackButton: true,
-          centerTitle: true,
-        ),
-        child: Center(
-          child: Wrap(
-            children:
-                packs
-                    .map(
-                      (questionsPack) =>
-                          QuestionsPackCard(questionsPack: questionsPack),
-                    )
-                    .toList(),
-          ),
-        ),
+    final LocalDatabaseEngine localDatabaseEngine = ref.watch(
+      localDatabaseEngineProvider,
+    );
+    return BaseScreen(
+      appBar: CustomAppBar(
+        title: category.categoryName,
+        withBackButton: true,
+        centerTitle: true,
+      ),
+      child: FutureBuilder(
+        future: localDatabaseEngine.getPackByCategoryId(category.id),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final List<QuestionPack> packsByCategoryId = snapshot.data;
+            return Center(
+              child: Wrap(
+                direction: Axis.horizontal,
+                children:
+                    packsByCategoryId
+                        .map(
+                          (questionPack) =>
+                              QuestionsPackCard(questionsPack: questionPack),
+                        )
+                        .toList(),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return Center(
+              child: Text(
+                "Error loading questions pack from the ${category.categoryName}",
+              ),
+            );
+          }
+        },
       ),
     );
   }

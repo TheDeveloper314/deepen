@@ -21,7 +21,19 @@ class MyApp extends ConsumerWidget {
       title: "Deepen",
       home: initializerAsyncData.when(
         data: (_) => HomeScreen(),
-        error: (e, s) => Center(child: Text(e.toString())),
+        error:
+            (e, s) => Scaffold(
+              backgroundColor: AppTheme.surface,
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [Text(e.toString()), Text(s.toString())],
+                    ),
+                  ),
+                ),
+              ),
+            ),
         loading: () => Center(child: CircularProgressIndicator()),
       ),
     );

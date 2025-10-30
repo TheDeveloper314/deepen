@@ -31,22 +31,22 @@ class _PopularPacksState extends ConsumerState<PopularPacks> {
       spacing: kSmallSpacing,
       children: [
         Text("Most Popular Questions Packs", style: kTitleTextStyle),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                mainEngine
-                    .getQuestionsPacks(popularPacks)
-                    .map(
-                      (questionsPack) => QuestionsPackCard(
-                        cardWidth: cardWidth,
-                        questionsPack: questionsPack,
-                      ),
-                    )
-                    .toList(),
-          ),
-        ),
+        // SingleChildScrollView(
+        //   scrollDirection: Axis.horizontal,
+        //   child: Row(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children:
+        //         mainEngine
+        //             .getQuestionsPacks(popularPacks)
+        //             .map(
+        //               (questionsPack) => QuestionsPackCard(
+        //                 cardWidth: cardWidth,
+        //                 questionsPack: questionsPack,
+        //               ),
+        //             )
+        //             .toList(),
+        //   ),
+        // ),
       ],
     );
   }

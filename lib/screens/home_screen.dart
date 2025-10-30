@@ -1,4 +1,7 @@
+import 'package:deepen/database/app_database.dart';
+import 'package:deepen/providers/local_database_provider.dart';
 import 'package:deepen/screens/base_screen.dart';
+import 'package:deepen/services/local_database_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,29 +21,27 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BaseScreen(
-        child: SingleChildScrollView(
-          child: Column(
-            spacing: kMediumSpacing,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomAppBar(
-                title: "Deepen: Stronger Bonds",
-                showLogo: true,
-                showLanguageButton: true,
-              ),
-              Column(
-                spacing: kMediumSpacing,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TodaysReflectionCard(),
-                  CategoriesList(),
-                  PopularPacks(),
-                ],
-              ),
-            ],
-          ),
+    return BaseScreen(
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: kMediumSpacing,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomAppBar(
+              title: "Deepen: Stronger Bonds",
+              showLogo: true,
+              showLanguageButton: true,
+            ),
+            Column(
+              spacing: kMediumSpacing,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TodaysReflectionCard(),
+                CategoriesList(),
+                PopularPacks(),
+              ],
+            ),
+          ],
         ),
       ),
     );

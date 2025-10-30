@@ -19,6 +19,8 @@ class Categories extends Table {
 
   DateTimeColumn get modifiedAt => dateTime()();
 
+  TextColumn get syncStatus => text().withDefault(const Constant("synced"))();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -56,6 +58,8 @@ class QuestionPacks extends Table {
 
   DateTimeColumn get modifiedAt => dateTime()();
 
+  TextColumn get syncStatus => text().withDefault(const Constant("synced"))();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -79,6 +83,8 @@ class Questions extends Table {
 
   DateTimeColumn get modifiedAt => dateTime()();
 
+  TextColumn get syncStatus => text().withDefault(const Constant("synced"))();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -101,6 +107,8 @@ class Translations extends Table {
   DateTimeColumn get createdAt => dateTime()();
 
   DateTimeColumn get modifiedAt => dateTime()();
+
+  TextColumn get syncStatus => text().withDefault(const Constant("synced"))();
 
   @override
   Set<Column> get primaryKey => {id};

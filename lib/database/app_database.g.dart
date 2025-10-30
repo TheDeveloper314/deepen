@@ -96,6 +96,18 @@ class $CategoriesTable extends Categories
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _syncStatusMeta = const VerificationMeta(
+    'syncStatus',
+  );
+  @override
+  late final GeneratedColumn<String> syncStatus = GeneratedColumn<String>(
+    'sync_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant("synced"),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -106,6 +118,7 @@ class $CategoriesTable extends Categories
     isActive,
     createdAt,
     modifiedAt,
+    syncStatus,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -183,6 +196,12 @@ class $CategoriesTable extends Categories
     } else if (isInserting) {
       context.missing(_modifiedAtMeta);
     }
+    if (data.containsKey('sync_status')) {
+      context.handle(
+        _syncStatusMeta,
+        syncStatus.isAcceptableOrUnknown(data['sync_status']!, _syncStatusMeta),
+      );
+    }
     return context;
   }
 
@@ -232,6 +251,11 @@ class $CategoriesTable extends Categories
             DriftSqlType.dateTime,
             data['${effectivePrefix}modified_at'],
           )!,
+      syncStatus:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}sync_status'],
+          )!,
     );
   }
 
@@ -250,6 +274,7 @@ class Category extends DataClass implements Insertable<Category> {
   final bool isActive;
   final DateTime createdAt;
   final DateTime modifiedAt;
+  final String syncStatus;
   const Category({
     required this.id,
     required this.categoryName,
@@ -259,6 +284,7 @@ class Category extends DataClass implements Insertable<Category> {
     required this.isActive,
     required this.createdAt,
     required this.modifiedAt,
+    required this.syncStatus,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -271,6 +297,7 @@ class Category extends DataClass implements Insertable<Category> {
     map['is_active'] = Variable<bool>(isActive);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['modified_at'] = Variable<DateTime>(modifiedAt);
+    map['sync_status'] = Variable<String>(syncStatus);
     return map;
   }
 
@@ -284,6 +311,7 @@ class Category extends DataClass implements Insertable<Category> {
       isActive: Value(isActive),
       createdAt: Value(createdAt),
       modifiedAt: Value(modifiedAt),
+      syncStatus: Value(syncStatus),
     );
   }
 
@@ -301,6 +329,7 @@ class Category extends DataClass implements Insertable<Category> {
       isActive: serializer.fromJson<bool>(json['isActive']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
+      syncStatus: serializer.fromJson<String>(json['syncStatus']),
     );
   }
   @override
@@ -315,6 +344,7 @@ class Category extends DataClass implements Insertable<Category> {
       'isActive': serializer.toJson<bool>(isActive),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
+      'syncStatus': serializer.toJson<String>(syncStatus),
     };
   }
 
@@ -327,6 +357,7 @@ class Category extends DataClass implements Insertable<Category> {
     bool? isActive,
     DateTime? createdAt,
     DateTime? modifiedAt,
+    String? syncStatus,
   }) => Category(
     id: id ?? this.id,
     categoryName: categoryName ?? this.categoryName,
@@ -336,6 +367,7 @@ class Category extends DataClass implements Insertable<Category> {
     isActive: isActive ?? this.isActive,
     createdAt: createdAt ?? this.createdAt,
     modifiedAt: modifiedAt ?? this.modifiedAt,
+    syncStatus: syncStatus ?? this.syncStatus,
   );
   Category copyWithCompanion(CategoriesCompanion data) {
     return Category(
@@ -351,6 +383,8 @@ class Category extends DataClass implements Insertable<Category> {
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       modifiedAt:
           data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
+      syncStatus:
+          data.syncStatus.present ? data.syncStatus.value : this.syncStatus,
     );
   }
 
@@ -364,7 +398,8 @@ class Category extends DataClass implements Insertable<Category> {
           ..write('sortOrder: $sortOrder, ')
           ..write('isActive: $isActive, ')
           ..write('createdAt: $createdAt, ')
-          ..write('modifiedAt: $modifiedAt')
+          ..write('modifiedAt: $modifiedAt, ')
+          ..write('syncStatus: $syncStatus')
           ..write(')'))
         .toString();
   }
@@ -379,6 +414,7 @@ class Category extends DataClass implements Insertable<Category> {
     isActive,
     createdAt,
     modifiedAt,
+    syncStatus,
   );
   @override
   bool operator ==(Object other) =>
@@ -391,7 +427,8 @@ class Category extends DataClass implements Insertable<Category> {
           other.sortOrder == this.sortOrder &&
           other.isActive == this.isActive &&
           other.createdAt == this.createdAt &&
-          other.modifiedAt == this.modifiedAt);
+          other.modifiedAt == this.modifiedAt &&
+          other.syncStatus == this.syncStatus);
 }
 
 class CategoriesCompanion extends UpdateCompanion<Category> {
@@ -403,6 +440,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<bool> isActive;
   final Value<DateTime> createdAt;
   final Value<DateTime> modifiedAt;
+  final Value<String> syncStatus;
   final Value<int> rowid;
   const CategoriesCompanion({
     this.id = const Value.absent(),
@@ -413,6 +451,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     this.isActive = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.modifiedAt = const Value.absent(),
+    this.syncStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CategoriesCompanion.insert({
@@ -424,6 +463,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     required bool isActive,
     required DateTime createdAt,
     required DateTime modifiedAt,
+    this.syncStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        categoryName = Value(categoryName),
@@ -442,6 +482,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Expression<bool>? isActive,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? modifiedAt,
+    Expression<String>? syncStatus,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -453,6 +494,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       if (isActive != null) 'is_active': isActive,
       if (createdAt != null) 'created_at': createdAt,
       if (modifiedAt != null) 'modified_at': modifiedAt,
+      if (syncStatus != null) 'sync_status': syncStatus,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -466,6 +508,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Value<bool>? isActive,
     Value<DateTime>? createdAt,
     Value<DateTime>? modifiedAt,
+    Value<String>? syncStatus,
     Value<int>? rowid,
   }) {
     return CategoriesCompanion(
@@ -477,6 +520,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
       modifiedAt: modifiedAt ?? this.modifiedAt,
+      syncStatus: syncStatus ?? this.syncStatus,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -508,6 +552,9 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (modifiedAt.present) {
       map['modified_at'] = Variable<DateTime>(modifiedAt.value);
     }
+    if (syncStatus.present) {
+      map['sync_status'] = Variable<String>(syncStatus.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -525,6 +572,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
           ..write('isActive: $isActive, ')
           ..write('createdAt: $createdAt, ')
           ..write('modifiedAt: $modifiedAt, ')
+          ..write('syncStatus: $syncStatus, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -710,6 +758,18 @@ class $QuestionPacksTable extends QuestionPacks
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _syncStatusMeta = const VerificationMeta(
+    'syncStatus',
+  );
+  @override
+  late final GeneratedColumn<String> syncStatus = GeneratedColumn<String>(
+    'sync_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant("synced"),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -728,6 +788,7 @@ class $QuestionPacksTable extends QuestionPacks
     ratingAverage,
     createdAt,
     modifiedAt,
+    syncStatus,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -874,6 +935,12 @@ class $QuestionPacksTable extends QuestionPacks
     } else if (isInserting) {
       context.missing(_modifiedAtMeta);
     }
+    if (data.containsKey('sync_status')) {
+      context.handle(
+        _syncStatusMeta,
+        syncStatus.isAcceptableOrUnknown(data['sync_status']!, _syncStatusMeta),
+      );
+    }
     return context;
   }
 
@@ -963,6 +1030,11 @@ class $QuestionPacksTable extends QuestionPacks
             DriftSqlType.dateTime,
             data['${effectivePrefix}modified_at'],
           )!,
+      syncStatus:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}sync_status'],
+          )!,
     );
   }
 
@@ -994,6 +1066,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
   final double ratingAverage;
   final DateTime createdAt;
   final DateTime modifiedAt;
+  final String syncStatus;
   const QuestionPack({
     required this.id,
     required this.categoryId,
@@ -1011,6 +1084,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
     required this.ratingAverage,
     required this.createdAt,
     required this.modifiedAt,
+    required this.syncStatus,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1037,6 +1111,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
     map['rating_average'] = Variable<double>(ratingAverage);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['modified_at'] = Variable<DateTime>(modifiedAt);
+    map['sync_status'] = Variable<String>(syncStatus);
     return map;
   }
 
@@ -1061,6 +1136,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
       ratingAverage: Value(ratingAverage),
       createdAt: Value(createdAt),
       modifiedAt: Value(modifiedAt),
+      syncStatus: Value(syncStatus),
     );
   }
 
@@ -1086,6 +1162,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
       ratingAverage: serializer.fromJson<double>(json['ratingAverage']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
+      syncStatus: serializer.fromJson<String>(json['syncStatus']),
     );
   }
   @override
@@ -1108,6 +1185,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
       'ratingAverage': serializer.toJson<double>(ratingAverage),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
+      'syncStatus': serializer.toJson<String>(syncStatus),
     };
   }
 
@@ -1128,6 +1206,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
     double? ratingAverage,
     DateTime? createdAt,
     DateTime? modifiedAt,
+    String? syncStatus,
   }) => QuestionPack(
     id: id ?? this.id,
     categoryId: categoryId ?? this.categoryId,
@@ -1145,6 +1224,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
     ratingAverage: ratingAverage ?? this.ratingAverage,
     createdAt: createdAt ?? this.createdAt,
     modifiedAt: modifiedAt ?? this.modifiedAt,
+    syncStatus: syncStatus ?? this.syncStatus,
   );
   QuestionPack copyWithCompanion(QuestionPacksCompanion data) {
     return QuestionPack(
@@ -1179,6 +1259,8 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       modifiedAt:
           data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
+      syncStatus:
+          data.syncStatus.present ? data.syncStatus.value : this.syncStatus,
     );
   }
 
@@ -1200,7 +1282,8 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
           ..write('ratingCount: $ratingCount, ')
           ..write('ratingAverage: $ratingAverage, ')
           ..write('createdAt: $createdAt, ')
-          ..write('modifiedAt: $modifiedAt')
+          ..write('modifiedAt: $modifiedAt, ')
+          ..write('syncStatus: $syncStatus')
           ..write(')'))
         .toString();
   }
@@ -1223,6 +1306,7 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
     ratingAverage,
     createdAt,
     modifiedAt,
+    syncStatus,
   );
   @override
   bool operator ==(Object other) =>
@@ -1243,7 +1327,8 @@ class QuestionPack extends DataClass implements Insertable<QuestionPack> {
           other.ratingCount == this.ratingCount &&
           other.ratingAverage == this.ratingAverage &&
           other.createdAt == this.createdAt &&
-          other.modifiedAt == this.modifiedAt);
+          other.modifiedAt == this.modifiedAt &&
+          other.syncStatus == this.syncStatus);
 }
 
 class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
@@ -1263,6 +1348,7 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
   final Value<double> ratingAverage;
   final Value<DateTime> createdAt;
   final Value<DateTime> modifiedAt;
+  final Value<String> syncStatus;
   final Value<int> rowid;
   const QuestionPacksCompanion({
     this.id = const Value.absent(),
@@ -1281,6 +1367,7 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
     this.ratingAverage = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.modifiedAt = const Value.absent(),
+    this.syncStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   QuestionPacksCompanion.insert({
@@ -1300,6 +1387,7 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
     required double ratingAverage,
     required DateTime createdAt,
     required DateTime modifiedAt,
+    this.syncStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        categoryId = Value(categoryId),
@@ -1332,6 +1420,7 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
     Expression<double>? ratingAverage,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? modifiedAt,
+    Expression<String>? syncStatus,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1351,6 +1440,7 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
       if (ratingAverage != null) 'rating_average': ratingAverage,
       if (createdAt != null) 'created_at': createdAt,
       if (modifiedAt != null) 'modified_at': modifiedAt,
+      if (syncStatus != null) 'sync_status': syncStatus,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1372,6 +1462,7 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
     Value<double>? ratingAverage,
     Value<DateTime>? createdAt,
     Value<DateTime>? modifiedAt,
+    Value<String>? syncStatus,
     Value<int>? rowid,
   }) {
     return QuestionPacksCompanion(
@@ -1391,6 +1482,7 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
       ratingAverage: ratingAverage ?? this.ratingAverage,
       createdAt: createdAt ?? this.createdAt,
       modifiedAt: modifiedAt ?? this.modifiedAt,
+      syncStatus: syncStatus ?? this.syncStatus,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1448,6 +1540,9 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
     if (modifiedAt.present) {
       map['modified_at'] = Variable<DateTime>(modifiedAt.value);
     }
+    if (syncStatus.present) {
+      map['sync_status'] = Variable<String>(syncStatus.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1473,6 +1568,7 @@ class QuestionPacksCompanion extends UpdateCompanion<QuestionPack> {
           ..write('ratingAverage: $ratingAverage, ')
           ..write('createdAt: $createdAt, ')
           ..write('modifiedAt: $modifiedAt, ')
+          ..write('syncStatus: $syncStatus, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1581,6 +1677,18 @@ class $QuestionsTable extends Questions
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _syncStatusMeta = const VerificationMeta(
+    'syncStatus',
+  );
+  @override
+  late final GeneratedColumn<String> syncStatus = GeneratedColumn<String>(
+    'sync_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant("synced"),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1592,6 +1700,7 @@ class $QuestionsTable extends Questions
     isActive,
     createdAt,
     modifiedAt,
+    syncStatus,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1672,6 +1781,12 @@ class $QuestionsTable extends Questions
     } else if (isInserting) {
       context.missing(_modifiedAtMeta);
     }
+    if (data.containsKey('sync_status')) {
+      context.handle(
+        _syncStatusMeta,
+        syncStatus.isAcceptableOrUnknown(data['sync_status']!, _syncStatusMeta),
+      );
+    }
     return context;
   }
 
@@ -1727,6 +1842,11 @@ class $QuestionsTable extends Questions
             DriftSqlType.dateTime,
             data['${effectivePrefix}modified_at'],
           )!,
+      syncStatus:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}sync_status'],
+          )!,
     );
   }
 
@@ -1751,6 +1871,7 @@ class Question extends DataClass implements Insertable<Question> {
   final bool isActive;
   final DateTime createdAt;
   final DateTime modifiedAt;
+  final String syncStatus;
   const Question({
     required this.id,
     required this.packId,
@@ -1761,6 +1882,7 @@ class Question extends DataClass implements Insertable<Question> {
     required this.isActive,
     required this.createdAt,
     required this.modifiedAt,
+    required this.syncStatus,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1778,6 +1900,7 @@ class Question extends DataClass implements Insertable<Question> {
     map['is_active'] = Variable<bool>(isActive);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['modified_at'] = Variable<DateTime>(modifiedAt);
+    map['sync_status'] = Variable<String>(syncStatus);
     return map;
   }
 
@@ -1792,6 +1915,7 @@ class Question extends DataClass implements Insertable<Question> {
       isActive: Value(isActive),
       createdAt: Value(createdAt),
       modifiedAt: Value(modifiedAt),
+      syncStatus: Value(syncStatus),
     );
   }
 
@@ -1810,6 +1934,7 @@ class Question extends DataClass implements Insertable<Question> {
       isActive: serializer.fromJson<bool>(json['isActive']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
+      syncStatus: serializer.fromJson<String>(json['syncStatus']),
     );
   }
   @override
@@ -1825,6 +1950,7 @@ class Question extends DataClass implements Insertable<Question> {
       'isActive': serializer.toJson<bool>(isActive),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
+      'syncStatus': serializer.toJson<String>(syncStatus),
     };
   }
 
@@ -1838,6 +1964,7 @@ class Question extends DataClass implements Insertable<Question> {
     bool? isActive,
     DateTime? createdAt,
     DateTime? modifiedAt,
+    String? syncStatus,
   }) => Question(
     id: id ?? this.id,
     packId: packId ?? this.packId,
@@ -1848,6 +1975,7 @@ class Question extends DataClass implements Insertable<Question> {
     isActive: isActive ?? this.isActive,
     createdAt: createdAt ?? this.createdAt,
     modifiedAt: modifiedAt ?? this.modifiedAt,
+    syncStatus: syncStatus ?? this.syncStatus,
   );
   Question copyWithCompanion(QuestionsCompanion data) {
     return Question(
@@ -1868,6 +1996,8 @@ class Question extends DataClass implements Insertable<Question> {
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       modifiedAt:
           data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
+      syncStatus:
+          data.syncStatus.present ? data.syncStatus.value : this.syncStatus,
     );
   }
 
@@ -1882,7 +2012,8 @@ class Question extends DataClass implements Insertable<Question> {
           ..write('tags: $tags, ')
           ..write('isActive: $isActive, ')
           ..write('createdAt: $createdAt, ')
-          ..write('modifiedAt: $modifiedAt')
+          ..write('modifiedAt: $modifiedAt, ')
+          ..write('syncStatus: $syncStatus')
           ..write(')'))
         .toString();
   }
@@ -1898,6 +2029,7 @@ class Question extends DataClass implements Insertable<Question> {
     isActive,
     createdAt,
     modifiedAt,
+    syncStatus,
   );
   @override
   bool operator ==(Object other) =>
@@ -1911,7 +2043,8 @@ class Question extends DataClass implements Insertable<Question> {
           other.tags == this.tags &&
           other.isActive == this.isActive &&
           other.createdAt == this.createdAt &&
-          other.modifiedAt == this.modifiedAt);
+          other.modifiedAt == this.modifiedAt &&
+          other.syncStatus == this.syncStatus);
 }
 
 class QuestionsCompanion extends UpdateCompanion<Question> {
@@ -1924,6 +2057,7 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
   final Value<bool> isActive;
   final Value<DateTime> createdAt;
   final Value<DateTime> modifiedAt;
+  final Value<String> syncStatus;
   final Value<int> rowid;
   const QuestionsCompanion({
     this.id = const Value.absent(),
@@ -1935,6 +2069,7 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
     this.isActive = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.modifiedAt = const Value.absent(),
+    this.syncStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   QuestionsCompanion.insert({
@@ -1947,6 +2082,7 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
     required bool isActive,
     required DateTime createdAt,
     required DateTime modifiedAt,
+    this.syncStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        packId = Value(packId),
@@ -1966,6 +2102,7 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
     Expression<bool>? isActive,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? modifiedAt,
+    Expression<String>? syncStatus,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1978,6 +2115,7 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
       if (isActive != null) 'is_active': isActive,
       if (createdAt != null) 'created_at': createdAt,
       if (modifiedAt != null) 'modified_at': modifiedAt,
+      if (syncStatus != null) 'sync_status': syncStatus,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1992,6 +2130,7 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
     Value<bool>? isActive,
     Value<DateTime>? createdAt,
     Value<DateTime>? modifiedAt,
+    Value<String>? syncStatus,
     Value<int>? rowid,
   }) {
     return QuestionsCompanion(
@@ -2004,6 +2143,7 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
       modifiedAt: modifiedAt ?? this.modifiedAt,
+      syncStatus: syncStatus ?? this.syncStatus,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2040,6 +2180,9 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
     if (modifiedAt.present) {
       map['modified_at'] = Variable<DateTime>(modifiedAt.value);
     }
+    if (syncStatus.present) {
+      map['sync_status'] = Variable<String>(syncStatus.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2058,6 +2201,7 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
           ..write('isActive: $isActive, ')
           ..write('createdAt: $createdAt, ')
           ..write('modifiedAt: $modifiedAt, ')
+          ..write('syncStatus: $syncStatus, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2170,6 +2314,18 @@ class $TranslationsTable extends Translations
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _syncStatusMeta = const VerificationMeta(
+    'syncStatus',
+  );
+  @override
+  late final GeneratedColumn<String> syncStatus = GeneratedColumn<String>(
+    'sync_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant("synced"),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2181,6 +2337,7 @@ class $TranslationsTable extends Translations
     isVerified,
     createdAt,
     modifiedAt,
+    syncStatus,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2269,6 +2426,12 @@ class $TranslationsTable extends Translations
     } else if (isInserting) {
       context.missing(_modifiedAtMeta);
     }
+    if (data.containsKey('sync_status')) {
+      context.handle(
+        _syncStatusMeta,
+        syncStatus.isAcceptableOrUnknown(data['sync_status']!, _syncStatusMeta),
+      );
+    }
     return context;
   }
 
@@ -2323,6 +2486,11 @@ class $TranslationsTable extends Translations
             DriftSqlType.dateTime,
             data['${effectivePrefix}modified_at'],
           )!,
+      syncStatus:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}sync_status'],
+          )!,
     );
   }
 
@@ -2342,6 +2510,7 @@ class Translation extends DataClass implements Insertable<Translation> {
   final bool isVerified;
   final DateTime createdAt;
   final DateTime modifiedAt;
+  final String syncStatus;
   const Translation({
     required this.id,
     required this.entityType,
@@ -2352,6 +2521,7 @@ class Translation extends DataClass implements Insertable<Translation> {
     required this.isVerified,
     required this.createdAt,
     required this.modifiedAt,
+    required this.syncStatus,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2365,6 +2535,7 @@ class Translation extends DataClass implements Insertable<Translation> {
     map['is_verified'] = Variable<bool>(isVerified);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['modified_at'] = Variable<DateTime>(modifiedAt);
+    map['sync_status'] = Variable<String>(syncStatus);
     return map;
   }
 
@@ -2379,6 +2550,7 @@ class Translation extends DataClass implements Insertable<Translation> {
       isVerified: Value(isVerified),
       createdAt: Value(createdAt),
       modifiedAt: Value(modifiedAt),
+      syncStatus: Value(syncStatus),
     );
   }
 
@@ -2397,6 +2569,7 @@ class Translation extends DataClass implements Insertable<Translation> {
       isVerified: serializer.fromJson<bool>(json['isVerified']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
+      syncStatus: serializer.fromJson<String>(json['syncStatus']),
     );
   }
   @override
@@ -2412,6 +2585,7 @@ class Translation extends DataClass implements Insertable<Translation> {
       'isVerified': serializer.toJson<bool>(isVerified),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
+      'syncStatus': serializer.toJson<String>(syncStatus),
     };
   }
 
@@ -2425,6 +2599,7 @@ class Translation extends DataClass implements Insertable<Translation> {
     bool? isVerified,
     DateTime? createdAt,
     DateTime? modifiedAt,
+    String? syncStatus,
   }) => Translation(
     id: id ?? this.id,
     entityType: entityType ?? this.entityType,
@@ -2435,6 +2610,7 @@ class Translation extends DataClass implements Insertable<Translation> {
     isVerified: isVerified ?? this.isVerified,
     createdAt: createdAt ?? this.createdAt,
     modifiedAt: modifiedAt ?? this.modifiedAt,
+    syncStatus: syncStatus ?? this.syncStatus,
   );
   Translation copyWithCompanion(TranslationsCompanion data) {
     return Translation(
@@ -2456,6 +2632,8 @@ class Translation extends DataClass implements Insertable<Translation> {
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       modifiedAt:
           data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
+      syncStatus:
+          data.syncStatus.present ? data.syncStatus.value : this.syncStatus,
     );
   }
 
@@ -2470,7 +2648,8 @@ class Translation extends DataClass implements Insertable<Translation> {
           ..write('translationText: $translationText, ')
           ..write('isVerified: $isVerified, ')
           ..write('createdAt: $createdAt, ')
-          ..write('modifiedAt: $modifiedAt')
+          ..write('modifiedAt: $modifiedAt, ')
+          ..write('syncStatus: $syncStatus')
           ..write(')'))
         .toString();
   }
@@ -2486,6 +2665,7 @@ class Translation extends DataClass implements Insertable<Translation> {
     isVerified,
     createdAt,
     modifiedAt,
+    syncStatus,
   );
   @override
   bool operator ==(Object other) =>
@@ -2499,7 +2679,8 @@ class Translation extends DataClass implements Insertable<Translation> {
           other.translationText == this.translationText &&
           other.isVerified == this.isVerified &&
           other.createdAt == this.createdAt &&
-          other.modifiedAt == this.modifiedAt);
+          other.modifiedAt == this.modifiedAt &&
+          other.syncStatus == this.syncStatus);
 }
 
 class TranslationsCompanion extends UpdateCompanion<Translation> {
@@ -2512,6 +2693,7 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
   final Value<bool> isVerified;
   final Value<DateTime> createdAt;
   final Value<DateTime> modifiedAt;
+  final Value<String> syncStatus;
   final Value<int> rowid;
   const TranslationsCompanion({
     this.id = const Value.absent(),
@@ -2523,6 +2705,7 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
     this.isVerified = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.modifiedAt = const Value.absent(),
+    this.syncStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TranslationsCompanion.insert({
@@ -2535,6 +2718,7 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
     required bool isVerified,
     required DateTime createdAt,
     required DateTime modifiedAt,
+    this.syncStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        entityType = Value(entityType),
@@ -2555,6 +2739,7 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
     Expression<bool>? isVerified,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? modifiedAt,
+    Expression<String>? syncStatus,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2567,6 +2752,7 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
       if (isVerified != null) 'is_verified': isVerified,
       if (createdAt != null) 'created_at': createdAt,
       if (modifiedAt != null) 'modified_at': modifiedAt,
+      if (syncStatus != null) 'sync_status': syncStatus,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2581,6 +2767,7 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
     Value<bool>? isVerified,
     Value<DateTime>? createdAt,
     Value<DateTime>? modifiedAt,
+    Value<String>? syncStatus,
     Value<int>? rowid,
   }) {
     return TranslationsCompanion(
@@ -2593,6 +2780,7 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
       isVerified: isVerified ?? this.isVerified,
       createdAt: createdAt ?? this.createdAt,
       modifiedAt: modifiedAt ?? this.modifiedAt,
+      syncStatus: syncStatus ?? this.syncStatus,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2627,6 +2815,9 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
     if (modifiedAt.present) {
       map['modified_at'] = Variable<DateTime>(modifiedAt.value);
     }
+    if (syncStatus.present) {
+      map['sync_status'] = Variable<String>(syncStatus.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2645,6 +2836,7 @@ class TranslationsCompanion extends UpdateCompanion<Translation> {
           ..write('isVerified: $isVerified, ')
           ..write('createdAt: $createdAt, ')
           ..write('modifiedAt: $modifiedAt, ')
+          ..write('syncStatus: $syncStatus, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2680,6 +2872,7 @@ typedef $$CategoriesTableCreateCompanionBuilder =
       required bool isActive,
       required DateTime createdAt,
       required DateTime modifiedAt,
+      Value<String> syncStatus,
       Value<int> rowid,
     });
 typedef $$CategoriesTableUpdateCompanionBuilder =
@@ -2692,6 +2885,7 @@ typedef $$CategoriesTableUpdateCompanionBuilder =
       Value<bool> isActive,
       Value<DateTime> createdAt,
       Value<DateTime> modifiedAt,
+      Value<String> syncStatus,
       Value<int> rowid,
     });
 
@@ -2741,6 +2935,11 @@ class $$CategoriesTableFilterComposer
 
   ColumnFilters<DateTime> get modifiedAt => $composableBuilder(
     column: $table.modifiedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -2793,6 +2992,11 @@ class $$CategoriesTableOrderingComposer
     column: $table.modifiedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$CategoriesTableAnnotationComposer
@@ -2829,6 +3033,11 @@ class $$CategoriesTableAnnotationComposer
 
   GeneratedColumn<DateTime> get modifiedAt => $composableBuilder(
     column: $table.modifiedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
     builder: (column) => column,
   );
 }
@@ -2869,6 +3078,7 @@ class $$CategoriesTableTableManager
                 Value<bool> isActive = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> modifiedAt = const Value.absent(),
+                Value<String> syncStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CategoriesCompanion(
                 id: id,
@@ -2879,6 +3089,7 @@ class $$CategoriesTableTableManager
                 isActive: isActive,
                 createdAt: createdAt,
                 modifiedAt: modifiedAt,
+                syncStatus: syncStatus,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -2891,6 +3102,7 @@ class $$CategoriesTableTableManager
                 required bool isActive,
                 required DateTime createdAt,
                 required DateTime modifiedAt,
+                Value<String> syncStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CategoriesCompanion.insert(
                 id: id,
@@ -2901,6 +3113,7 @@ class $$CategoriesTableTableManager
                 isActive: isActive,
                 createdAt: createdAt,
                 modifiedAt: modifiedAt,
+                syncStatus: syncStatus,
                 rowid: rowid,
               ),
           withReferenceMapper:
@@ -2950,6 +3163,7 @@ typedef $$QuestionPacksTableCreateCompanionBuilder =
       required double ratingAverage,
       required DateTime createdAt,
       required DateTime modifiedAt,
+      Value<String> syncStatus,
       Value<int> rowid,
     });
 typedef $$QuestionPacksTableUpdateCompanionBuilder =
@@ -2970,6 +3184,7 @@ typedef $$QuestionPacksTableUpdateCompanionBuilder =
       Value<double> ratingAverage,
       Value<DateTime> createdAt,
       Value<DateTime> modifiedAt,
+      Value<String> syncStatus,
       Value<int> rowid,
     });
 
@@ -3062,6 +3277,11 @@ class $$QuestionPacksTableFilterComposer
     column: $table.modifiedAt,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnFilters<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$QuestionPacksTableOrderingComposer
@@ -3152,6 +3372,11 @@ class $$QuestionPacksTableOrderingComposer
     column: $table.modifiedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$QuestionPacksTableAnnotationComposer
@@ -3228,6 +3453,11 @@ class $$QuestionPacksTableAnnotationComposer
     column: $table.modifiedAt,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => column,
+  );
 }
 
 class $$QuestionPacksTableTableManager
@@ -3281,6 +3511,7 @@ class $$QuestionPacksTableTableManager
                 Value<double> ratingAverage = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> modifiedAt = const Value.absent(),
+                Value<String> syncStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => QuestionPacksCompanion(
                 id: id,
@@ -3299,6 +3530,7 @@ class $$QuestionPacksTableTableManager
                 ratingAverage: ratingAverage,
                 createdAt: createdAt,
                 modifiedAt: modifiedAt,
+                syncStatus: syncStatus,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -3319,6 +3551,7 @@ class $$QuestionPacksTableTableManager
                 required double ratingAverage,
                 required DateTime createdAt,
                 required DateTime modifiedAt,
+                Value<String> syncStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => QuestionPacksCompanion.insert(
                 id: id,
@@ -3337,6 +3570,7 @@ class $$QuestionPacksTableTableManager
                 ratingAverage: ratingAverage,
                 createdAt: createdAt,
                 modifiedAt: modifiedAt,
+                syncStatus: syncStatus,
                 rowid: rowid,
               ),
           withReferenceMapper:
@@ -3382,6 +3616,7 @@ typedef $$QuestionsTableCreateCompanionBuilder =
       required bool isActive,
       required DateTime createdAt,
       required DateTime modifiedAt,
+      Value<String> syncStatus,
       Value<int> rowid,
     });
 typedef $$QuestionsTableUpdateCompanionBuilder =
@@ -3395,6 +3630,7 @@ typedef $$QuestionsTableUpdateCompanionBuilder =
       Value<bool> isActive,
       Value<DateTime> createdAt,
       Value<DateTime> modifiedAt,
+      Value<String> syncStatus,
       Value<int> rowid,
     });
 
@@ -3452,6 +3688,11 @@ class $$QuestionsTableFilterComposer
     column: $table.modifiedAt,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnFilters<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$QuestionsTableOrderingComposer
@@ -3507,6 +3748,11 @@ class $$QuestionsTableOrderingComposer
     column: $table.modifiedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$QuestionsTableAnnotationComposer
@@ -3552,6 +3798,11 @@ class $$QuestionsTableAnnotationComposer
     column: $table.modifiedAt,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => column,
+  );
 }
 
 class $$QuestionsTableTableManager
@@ -3591,6 +3842,7 @@ class $$QuestionsTableTableManager
                 Value<bool> isActive = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> modifiedAt = const Value.absent(),
+                Value<String> syncStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => QuestionsCompanion(
                 id: id,
@@ -3602,6 +3854,7 @@ class $$QuestionsTableTableManager
                 isActive: isActive,
                 createdAt: createdAt,
                 modifiedAt: modifiedAt,
+                syncStatus: syncStatus,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -3615,6 +3868,7 @@ class $$QuestionsTableTableManager
                 required bool isActive,
                 required DateTime createdAt,
                 required DateTime modifiedAt,
+                Value<String> syncStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => QuestionsCompanion.insert(
                 id: id,
@@ -3626,6 +3880,7 @@ class $$QuestionsTableTableManager
                 isActive: isActive,
                 createdAt: createdAt,
                 modifiedAt: modifiedAt,
+                syncStatus: syncStatus,
                 rowid: rowid,
               ),
           withReferenceMapper:
@@ -3668,6 +3923,7 @@ typedef $$TranslationsTableCreateCompanionBuilder =
       required bool isVerified,
       required DateTime createdAt,
       required DateTime modifiedAt,
+      Value<String> syncStatus,
       Value<int> rowid,
     });
 typedef $$TranslationsTableUpdateCompanionBuilder =
@@ -3681,6 +3937,7 @@ typedef $$TranslationsTableUpdateCompanionBuilder =
       Value<bool> isVerified,
       Value<DateTime> createdAt,
       Value<DateTime> modifiedAt,
+      Value<String> syncStatus,
       Value<int> rowid,
     });
 
@@ -3735,6 +3992,11 @@ class $$TranslationsTableFilterComposer
 
   ColumnFilters<DateTime> get modifiedAt => $composableBuilder(
     column: $table.modifiedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -3792,6 +4054,11 @@ class $$TranslationsTableOrderingComposer
     column: $table.modifiedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TranslationsTableAnnotationComposer
@@ -3839,6 +4106,11 @@ class $$TranslationsTableAnnotationComposer
     column: $table.modifiedAt,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => column,
+  );
 }
 
 class $$TranslationsTableTableManager
@@ -3882,6 +4154,7 @@ class $$TranslationsTableTableManager
                 Value<bool> isVerified = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> modifiedAt = const Value.absent(),
+                Value<String> syncStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TranslationsCompanion(
                 id: id,
@@ -3893,6 +4166,7 @@ class $$TranslationsTableTableManager
                 isVerified: isVerified,
                 createdAt: createdAt,
                 modifiedAt: modifiedAt,
+                syncStatus: syncStatus,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -3906,6 +4180,7 @@ class $$TranslationsTableTableManager
                 required bool isVerified,
                 required DateTime createdAt,
                 required DateTime modifiedAt,
+                Value<String> syncStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TranslationsCompanion.insert(
                 id: id,
@@ -3917,6 +4192,7 @@ class $$TranslationsTableTableManager
                 isVerified: isVerified,
                 createdAt: createdAt,
                 modifiedAt: modifiedAt,
+                syncStatus: syncStatus,
                 rowid: rowid,
               ),
           withReferenceMapper:

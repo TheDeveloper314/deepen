@@ -11,7 +11,8 @@ final initializerProvider = FutureProvider<void>((ref) async {
   // watch for supabase auth change events
 
   // initialize syncEngine
-  await ref.watch(syncEngineProvider.future);
+  final SyncEngine syncEngine = await ref.watch(syncEngineProvider.future);
 
   // perform startup sync here
+  await syncEngine.syncAll();
 });

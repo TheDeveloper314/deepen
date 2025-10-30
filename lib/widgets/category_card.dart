@@ -1,5 +1,4 @@
-import 'package:deepen/models/category.dart';
-import 'package:deepen/models/questions_pack.dart';
+import 'package:deepen/database/app_database.dart';
 import 'package:deepen/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +10,7 @@ const double kImageSize = 150;
 
 class CategoryCard extends ConsumerStatefulWidget {
   final Category category;
+
   const CategoryCard({super.key, required this.category});
 
   @override
@@ -19,23 +19,23 @@ class CategoryCard extends ConsumerStatefulWidget {
 
 class _CategoryCardState extends ConsumerState<CategoryCard> {
   late final Category category;
-  late final int packsCount;
-  late int questionsCount;
+
+  // late final int packsCount;
+  // late int questionsCount;
 
   @override
   void initState() {
     category = widget.category;
-    packsCount = category.packs.length;
-    questionsCount = 0;
-    for (QuestionsPack questionsPack in category.packs) {
-      questionsCount += questionsPack.questions.length;
-    }
+    // packsCount = category.packs.length;
+    // questionsCount = 0;
+    // for (QuestionsPack questionsPack in category.packs) {
+    //   questionsCount += questionsPack.questions.length;
+    // }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String language = ref.read(languageProvider);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -58,7 +58,7 @@ class _CategoryCardState extends ConsumerState<CategoryCard> {
               borderRadius: BorderRadius.circular(kBorderRadius),
             ),
             child: Image.asset(
-              "assets/images/${category.categoryImage}.webp",
+              "assets/images/${category.imageUrl}.webp",
               errorBuilder: (context, obj, s) {
                 return Text("");
               },
@@ -66,17 +66,17 @@ class _CategoryCardState extends ConsumerState<CategoryCard> {
             ),
           ),
           Text(
-            category.categoryName[language] ?? "Unnamed",
+            category.categoryName != "" ? category.categoryName : "Unnamed",
             style: kBoldSubtitleTextStyleWithMainColor,
           ),
-          Row(
-            spacing: kSmallSpacing,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("$packsCount Packs", style: kSmallSubtitleTextStyle),
-              Text("$questionsCount Questions", style: kSmallSubtitleTextStyle),
-            ],
-          ),
+          // Row(
+          //   spacing: kSmallSpacing,
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text("$packsCount Packs", style: kSmallSubtitleTextStyle),
+          //     Text("$questionsCount Questions", style: kSmallSubtitleTextStyle),
+          //   ],
+          // ),
         ],
       ),
     );

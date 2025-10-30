@@ -16,7 +16,7 @@ class AppDatabase extends _$AppDatabase {
 
   // Bump this when you change table structure
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   // Migration strategy, if you need to run upgrades, add logic here
   @override
@@ -28,9 +28,31 @@ class AppDatabase extends _$AppDatabase {
       // you define the steps to migrate (addition, deletion, etc) in each version schema change.
       // similar to makemigrations in django
       // Example: if (from == 1){await m.addColumn(questionPacks, questionPacks.description);}
+      if (from == 1) {
+        // add columns
+        await m.addColumn(categories, categories.syncStatus);
+        await m.addColumn(questionPacks, questionPacks.syncStatus);
+        await m.addColumn(questions, questions.syncStatus);
+        await m.addColumn(translations, translations.syncStatus);
+
+        // initialize columns so they are not null
+        await customStatement('UPDATE categories SET sync_status = "synced"');
+        await customStatement(
+          'UPDATE question_packs SET synced_status = "synced"',
+        );
+        await customStatement('UPDATE questions SET sync_status "synced"');
+        await customStatement('UPDATE translations SET sync_status "synced"');
+      }
     },
     beforeOpen: (details) async {
       // called whenever DB opens
+      if (details.wasCreated) {
+        print("Database was created successfully");
+      } else if (details.hadUpgrade) {
+        print(
+          "Upgraded from ${details.versionBefore} to ${details.versionNow}",
+        );
+      }
     },
   );
 }
