@@ -46,13 +46,13 @@ class AppDatabase extends _$AppDatabase {
     },
     beforeOpen: (details) async {
       // called whenever DB opens
-      if (details.wasCreated) {
-        print("Database was created successfully");
-      } else if (details.hadUpgrade) {
-        print(
-          "Upgraded from ${details.versionBefore} to ${details.versionNow}",
-        );
-      }
+      // if (details.wasCreated) {
+      //   print("Database was created successfully");
+      // } else if (details.hadUpgrade) {
+      //   print(
+      //     "Upgraded from ${details.versionBefore} to ${details.versionNow}",
+      //   );
+      // }
     },
   );
 }

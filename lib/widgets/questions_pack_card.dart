@@ -1,5 +1,4 @@
 import 'package:deepen/database/app_database.dart';
-import 'package:deepen/providers/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,18 +18,17 @@ class QuestionsPackCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double height = MediaQuery.of(context).size.height;
-    final String language = ref.read(languageProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder:
-          //         (context) => QuestionsScreen(questionsPack: questionsPack),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => QuestionsScreen(questionPack: questionsPack),
+            ),
+          );
         },
         child: SizedBox(
           width: cardWidth,

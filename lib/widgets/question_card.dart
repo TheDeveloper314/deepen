@@ -1,14 +1,14 @@
-import 'package:deepen/models/question.dart';
 import 'package:deepen/widgets/custom_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
-import '../providers/language_provider.dart';
+import '../database/app_database.dart' show Question;
 
 class QuestionCard extends ConsumerStatefulWidget {
   final Question question;
+
   const QuestionCard({super.key, required this.question});
 
   @override
@@ -18,13 +18,12 @@ class QuestionCard extends ConsumerStatefulWidget {
 class _QuestionCardState extends ConsumerState<QuestionCard> {
   @override
   Widget build(BuildContext context) {
-    final String language = ref.read(languageProvider);
     return Column(
       spacing: kLargeSpacing,
       children: [
         Text(
           textAlign: TextAlign.center,
-          widget.question.questionText[language] ?? "No Question",
+          widget.question.questionText ?? "No Question",
           style: kLargeTitleTextStyleAmiri,
         ),
         LayoutBuilder(

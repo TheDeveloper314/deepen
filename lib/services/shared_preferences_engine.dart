@@ -14,8 +14,10 @@ class SharedPreferencesEngine {
   String get selectedLanguage =>
       sharedPreferences.getString(_selectedLanguageKey) ?? "en";
 
-  Future<void> setSelectedLanguage(String languageCode) async =>
-      sharedPreferences.setString(_selectedLanguageKey, languageCode);
+  Future<void> setSelectedLanguage(String languageCode) async {
+    sharedPreferences.setString(_selectedLanguageKey, languageCode);
+    print(this.selectedLanguage);
+  }
 
   // Last Sync
   DateTime? get lastSyncDate {
@@ -46,3 +48,6 @@ final sharedPreferencesEngineProvider = FutureProvider<SharedPreferencesEngine>(
     return SharedPreferencesEngine(sharedPreferences: sharedPreferences);
   },
 );
+
+final sharedPreferencesEngineStaticProvider =
+    Provider<SharedPreferencesEngine?>((ref) => null);

@@ -1,5 +1,4 @@
 import 'package:deepen/database/app_database.dart' show Category, QuestionPack;
-import 'package:deepen/providers/language_provider.dart';
 import 'package:deepen/screens/base_screen.dart';
 import 'package:deepen/services/local_database_engine.dart';
 import 'package:deepen/widgets/questions_pack_card.dart';
@@ -39,7 +38,7 @@ class _QuestionsPacksScreenState extends ConsumerState<QuestionsPacksScreen> {
         centerTitle: true,
       ),
       child: FutureBuilder(
-        future: localDatabaseEngine.getPackByCategoryId(category.id),
+        future: localDatabaseEngine.getQuestionPackByCategoryId(category.id),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             final List<QuestionPack> packsByCategoryId = snapshot.data;

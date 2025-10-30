@@ -4,11 +4,9 @@ import 'package:deepen/models/question_model.dart';
 import 'package:deepen/models/question_pack_model.dart';
 import 'package:deepen/models/translation_model.dart';
 import 'package:deepen/providers/local_database_provider.dart';
-import 'package:deepen/providers/shared_preferences_provider.dart';
 import 'package:deepen/providers/supabase_client_provider.dart';
 import 'package:deepen/services/shared_preferences_engine.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SyncEngine {

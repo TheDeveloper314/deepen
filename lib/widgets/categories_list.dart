@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/local_database_engine.dart';
-import '../services/main_engine.dart';
 import 'category_card.dart';
 
 class CategoriesList extends ConsumerStatefulWidget {

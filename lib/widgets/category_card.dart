@@ -1,5 +1,6 @@
 import 'package:deepen/database/app_database.dart';
-import 'package:deepen/providers/language_provider.dart';
+import 'package:deepen/providers/translations_cache_provider.dart';
+import 'package:deepen/services/shared_preferences_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,6 +37,12 @@ class _CategoryCardState extends ConsumerState<CategoryCard> {
 
   @override
   Widget build(BuildContext context) {
+    final sharedPreferencesEngine = ref.watch(
+      sharedPreferencesEngineStaticProvider,
+    );
+    final translationsCacheStateNotifier = ref.watch(
+      translationsCacheProvider.notifier,
+    );
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -66,8 +73,15 @@ class _CategoryCardState extends ConsumerState<CategoryCard> {
             ),
           ),
           Text(
-            category.categoryName != "" ? category.categoryName : "Unnamed",
+            translationsCacheStateNotifier.getTranslation(
+                  "category",
+                  category.id,
+                  "categoryName",
+                  sharedPreferencesEngine!.selectedLanguage,
+                ) ??
+                category.categoryName,
             style: kBoldSubtitleTextStyleWithMainColor,
+            // textDirection: TextDirection.rtl
           ),
           // Row(
           //   spacing: kSmallSpacing,

@@ -1,8 +1,8 @@
+import 'package:deepen/services/shared_preferences_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
-import '../providers/language_provider.dart';
 
 class CustomAppBar extends ConsumerStatefulWidget {
   final bool showLogo;
@@ -11,6 +11,7 @@ class CustomAppBar extends ConsumerStatefulWidget {
   final String title;
   final bool centerTitle;
   final bool withBackButton;
+
   const CustomAppBar({
     super.key,
     this.showLogo = false,
@@ -26,10 +27,11 @@ class CustomAppBar extends ConsumerStatefulWidget {
 }
 
 class _CustomAppBarState extends ConsumerState<CustomAppBar> {
-  late String language;
   @override
   Widget build(BuildContext context) {
-    language = ref.watch(languageProvider);
+    final sharedPreferencesEngine = ref.watch(
+      sharedPreferencesEngineStaticProvider,
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -76,10 +78,10 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
                 ? IconButton(
                   onPressed: () {
                     setState(() {
-                      if (language == "en") {
-                        ref.read(languageProvider.notifier).state = "ar";
+                      if (sharedPreferencesEngine!.selectedLanguage == "en") {
+                        sharedPreferencesEngine.setSelectedLanguage("ar-iq");
                       } else {
-                        ref.read(languageProvider.notifier).state = "en";
+                        sharedPreferencesEngine.setSelectedLanguage("en");
                       }
                     });
                   },
